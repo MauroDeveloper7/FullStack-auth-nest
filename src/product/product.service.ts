@@ -12,7 +12,7 @@ export class ProductService extends PrismaClient implements OnModuleInit {
   }
 
   create(createProductDto: CreateProductDto) {
-    const newUser =this.product
+    // const newUser =this.
   }
 
   findAll() {

@@ -10,11 +10,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  name     String?
-  password String
+model Product {
+  id_product  Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  price       Float
+  image       String?
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Order       Order[]  @relation("productOrder")
 }
 
-model Product 
+model Type_doc {
+  id_type_doc Int      @id @default(autoincrement())
+  name        String
+  users       User[]   @relation("UserTypeDoc")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  name        String
+  lastname    String
+  id_type_doc Int
+  type_doc    Type_doc @relation(fields: [id_type_doc], references: [id_type_doc], name: "UserTypeDoc")
+  num_doc     Int      @unique
+  email       String   @unique
+  password    String
+  status      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Order       Order[]  @relation("UserOrder")
+}
+
+model Order {
+  id_order         Int      @id @default(autoincrement())
+  id_user_order    Int
+  id_product_order Int
+  id               User     @relation(fields: [id_order], references: [id], name: "UserOrder")
+  id_product       Product  @relation(fields: [id_product_order], references: [id_product], name: "productOrder")
+  message          String
+  status           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
